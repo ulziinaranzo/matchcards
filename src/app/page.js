@@ -1,10 +1,25 @@
+"use client";
 import { useState } from "react";
 import styles from "./page.module.css";
 
 // Initial board with emojis
 const board = [
-  "🤬", "😊", "🥰", "😹", "😝", "😎", "☠️", "😊",
-  "😝", "🤗", "🥰", "😹", "🤬", "😎", "🤗", "☠️"
+  "🤬",
+  "😊",
+  "🥰",
+  "😹",
+  "😝",
+  "😎",
+  "☠️",
+  "😊",
+  "😝",
+  "🤗",
+  "🥰",
+  "😹",
+  "🤬",
+  "😎",
+  "🤗",
+  "☠️",
 ];
 
 export default function Home() {
@@ -13,12 +28,11 @@ export default function Home() {
   const [disableClick, setDisableClick] = useState(false);
   const [win, setWin] = useState(false);
 
-  // Handle card click
   const handleClick = (index) => {
     if (disableClick || saveBoard[index]) return;
 
     const newBoard = [...saveBoard];
-    newBoard[index] = board[index]; // Reveal the card
+    newBoard[index] = board[index];
     setSaveBoard(newBoard);
 
     const updatedSelectedCards = [...selectedCards, index];
@@ -35,7 +49,7 @@ export default function Home() {
       } else {
         setTimeout(() => {
           const resetBoard = [...newBoard];
-          resetBoard[firstIndex] = null; // Flip cards back if no match
+          resetBoard[firstIndex] = null;
           resetBoard[secondIndex] = null;
           setSaveBoard(resetBoard);
           setSelectedCards([]);
@@ -45,11 +59,9 @@ export default function Home() {
     }
   };
 
-  // Check for win condition (all cards matched)
   const checkWin = (newBoard) => {
     if (!newBoard.includes(null)) {
       setWin(true);
-      alert("YOU WIN");
     }
   };
 
@@ -59,7 +71,7 @@ export default function Home() {
         {saveBoard.map((item, index) => (
           <div
             key={index}
-            className={`${styles.card} ${item ? styles.flipped : ""}`}
+            className={styles.card}
             onClick={() => handleClick(index)}
           >
             {item || ""}
