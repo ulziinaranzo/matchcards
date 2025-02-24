@@ -27,22 +27,21 @@ export default function Home() {
   const [selectedCards, setSelectedCards] = useState([]);
   const [disableClick, setDisableClick] = useState(false);
   const [win, setWin] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(60); // Timer starts at 60 seconds
-  const [timerActive, setTimerActive] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [timerA, setTimerA] = useState(false);
 
-  // Timer logic
   useEffect(() => {
     let timer;
-    if (timerActive && timeLeft > 0) {
+    if (timerA && timeLeft > 0) {
       timer = setInterval(() => {
         setTimeLeft((prevTime) => prevTime - 1);
       }, 1000);
     } else if (timeLeft === 0) {
-      setTimerActive(false); // Stop the timer if time runs out
-      setWin(false); // Optionally handle the timeout (e.g., show a "You Lose" message)
+      setTimerA(false);
+      setWin(false);
     }
-    return () => clearInterval(timer); // Cleanup interval on unmount or time change
-  }, [timerActive, timeLeft]);
+    return () => clearInterval(timer);
+  }, [timerA, timeLeft]);
 
   const handleClick = (index) => {
     if (disableClick || saveBoard[index]) return;
@@ -78,7 +77,7 @@ export default function Home() {
   const checkWin = (newBoard) => {
     if (!newBoard.includes(null)) {
       setWin(true);
-      setTimerActive(false); // Stop the timer when the player wins
+      setTimerA(false);
     }
   };
 
@@ -87,8 +86,8 @@ export default function Home() {
     setSelectedCards([]);
     setDisableClick(false);
     setWin(false);
-    setTimeLeft(60); // Reset time
-    setTimerActive(true); // Start the timer
+    setTimeLeft(60);
+    setTimerA(true);
   };
 
   return (
@@ -117,4 +116,3 @@ export default function Home() {
     </div>
   );
 }
-
