@@ -1,39 +1,24 @@
-"use client";
+import { useState } from "react";
 import styles from "./page.module.css";
-import { useState, useEffect } from "react";
 
-// Хувьсагчийн эхлэх утга
-const screenWidth = typeof window !== "undefined" ? window.innerWidth : 1024;
+// Initial board with emojis
+const board = [
+  "🤬", "😊", "🥰", "😹", "😝", "😎", "☠️", "😊",
+  "😝", "🤗", "🥰", "😹", "🤬", "😎", "🤗", "☠️"
+];
 
 export default function Home() {
-  const [board, setBoard] = useState([
-    "🤬",
-    "😊",
-    "🥰",
-    "😹",
-    "😝",
-    "😎",
-    "☠️",
-    "😊",
-    "😝",
-    "🤗",
-    "🥰",
-    "😹",
-    "🤬",
-    "😎",
-    "🤗",
-    "☠️",
-  ]);
-  const [saveBoard, setSaveBoard] = useState(new Array(16).fill(""));
+  const [saveBoard, setSaveBoard] = useState(new Array(16).fill(null));
   const [selectedCards, setSelectedCards] = useState([]);
   const [disableClick, setDisableClick] = useState(false);
   const [win, setWin] = useState(false);
 
+  // Handle card click
   const handleClick = (index) => {
     if (disableClick || saveBoard[index]) return;
 
     const newBoard = [...saveBoard];
-    newBoard[index] = board[index];
+    newBoard[index] = board[index]; // Reveal the card
     setSaveBoard(newBoard);
 
     const updatedSelectedCards = [...selectedCards, index];
@@ -50,8 +35,8 @@ export default function Home() {
       } else {
         setTimeout(() => {
           const resetBoard = [...newBoard];
-          resetBoard[firstIndex] = "";
-          resetBoard[secondIndex] = "";
+          resetBoard[firstIndex] = null; // Flip cards back if no match
+          resetBoard[secondIndex] = null;
           setSaveBoard(resetBoard);
           setSelectedCards([]);
           setDisableClick(false);
@@ -60,8 +45,9 @@ export default function Home() {
     }
   };
 
+  // Check for win condition (all cards matched)
   const checkWin = (newBoard) => {
-    if (!newBoard.includes("")) {
+    if (!newBoard.includes(null)) {
       setWin(true);
       alert("YOU WIN");
     }
@@ -73,7 +59,7 @@ export default function Home() {
         {saveBoard.map((item, index) => (
           <div
             key={index}
-            className={styles.card}
+            className={`${styles.card} ${item ? styles.flipped : ""}`}
             onClick={() => handleClick(index)}
           >
             {item || ""}
